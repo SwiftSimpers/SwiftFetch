@@ -7,7 +7,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: fwal/setup-swift@v1
+      - uses: DjDeveloperr/setup-swift@adb7ede465681301ddb22371deb92465e6650761
         with:
           swift-version: "5.5-dev"
       - name: Build
