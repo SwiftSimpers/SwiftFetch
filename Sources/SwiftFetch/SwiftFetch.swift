@@ -1,4 +1,7 @@
 import Foundation
+#if os(Linux)
+import FoundationNetworking
+#endif
 
 /**
  Used to set the HTTP method for a request.
