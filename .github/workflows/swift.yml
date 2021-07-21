@@ -17,6 +17,7 @@ jobs:
       uses: sersoft-gmbh/SwiftyActions@v1.3.0
       with:
         branch-name: release/5.5
+        version-tag: swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-19-a
         platform: ubuntu-20.04
     - name: Build
       run: swift build
