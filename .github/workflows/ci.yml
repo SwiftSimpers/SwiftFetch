@@ -1,6 +1,6 @@
 name: Swift
 
-on: [push]
+on: []
 
 jobs:
   build:
