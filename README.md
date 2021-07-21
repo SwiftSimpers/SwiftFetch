@@ -33,8 +33,14 @@ struct Program {
 }
 ```
 
+## Contributing
+
+You're always welcome to contribute! 
+
+- We use SwiftFormat for formatting.
+
 ## License
 
-Check [./LICENSE] for more info.
+Check (LICENSE)[./LICENSE] for more info.
 
 Copyright 2021-present (c) DjDeveloperr, Helloyunho
