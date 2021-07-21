@@ -1,3 +1,7 @@
+# Note: Currently disabled as Swift 5.5-dev's Async stuff doesn't 
+# seem to work well on current macOS version that GitHub actions support.. 
+# at least for now.
+
 name: Swift
 
 on: []
