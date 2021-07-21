@@ -8,7 +8,7 @@ Fetch-like API implementation for Swift for asynchronous HTTP requests with the 
 import SwiftFetch
 
 let response = try await fetch("https://google.com")
-print("HTML", try await response.text())
+print(try await response.text())
 ```
 
 Wanna stream? It's easy!
