@@ -31,6 +31,6 @@ You're always welcome to contribute!
 
 ## License
 
-Check (LICENSE)[./LICENSE] for more info.
+Check [LICENSE](./LICENSE]) for more info.
 
 Copyright 2021-present (c) DjDeveloperr, Helloyunho
