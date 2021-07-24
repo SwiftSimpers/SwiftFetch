@@ -4,14 +4,14 @@
 
 name: Swift
 
-on: []
+on: [push]
 
 jobs:
   build:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: DjDeveloperr/setup-swift@adb7ede465681301ddb22371deb92465e6650761
+      - uses: DjDeveloperr/setup-swift@5def259a127e93e6e60850a6f4de93c8a74f957c
         with:
           swift-version: "5.5-dev"
       - name: Build
