@@ -69,6 +69,13 @@ public struct FetchRequestInit {
     public var headers: [String: String] = [:]
     /// The body of the request.
     public var body: Data?
+    
+    public init(method: RequestMethod? = nil, url: URL? = nil, headers: [String: String] = [:], body: Data? = nil) {
+        self.method = method
+        self.url = url
+        self.headers = headers
+        self.body = body
+    }
 }
 
 /**
