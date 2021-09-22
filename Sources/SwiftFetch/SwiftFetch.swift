@@ -1,5 +1,5 @@
 import Foundation
-#if os(Linux)
+#if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
 
@@ -62,13 +62,13 @@ public struct FetchHeaders {
  */
 public struct FetchRequestInit {
     /// The HTTP method to use.
-    var method: RequestMethod?
+    public var method: RequestMethod?
     /// The URL to make the request to.
-    var url: URL?
+    public var url: URL?
     /// A dictionary of headers to send with the request.
-    var headers: [String: String] = [:]
+    public var headers: [String: String] = [:]
     /// The body of the request.
-    var body: Data?
+    public var body: Data?
 }
 
 /**

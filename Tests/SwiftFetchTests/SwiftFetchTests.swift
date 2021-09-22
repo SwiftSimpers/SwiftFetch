@@ -5,8 +5,12 @@ import XCTest
 func startHttpServer() throws -> HttpServer {
     let server = HttpServer()
 
-    server["/"] = { _ in
-        HttpResponse.ok(.text("Hello World!"))
+    server["/"] = { req in
+        if let test = req.headers["test"] {
+            return HttpResponse.ok(.text(test))
+        } else {
+            return HttpResponse.ok(.text("Hello World!"))
+        }
     }
     server["/json"] = { _ in
         HttpResponse.ok(.text("{ \"test\": \"naisu\"}"))
@@ -44,6 +48,22 @@ final class SwiftFetchTests: XCTestCase {
         let json = try await res.json()
         XCTAssertEqual(json as! [String: String], ["test": "naisu"])
         
+        server.stop()
+    }
+    
+    func testReadingTextWithHeader() async throws {
+        let server = try startHttpServer()
+
+        let res = try await fetch("http://localhost:6969", FetchRequestInit(headers: ["test": "test"]))
+
+        XCTAssertEqual(res.status, 200)
+        XCTAssertTrue(res.ok)
+
+        let text = try await res.text()
+        XCTAssertEqual(text, "test")
+
+        XCTAssertEqual(res.headers.get("content-length"), "12")
+
         server.stop()
     }
 }
