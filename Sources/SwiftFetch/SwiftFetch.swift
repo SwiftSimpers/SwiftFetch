@@ -320,7 +320,7 @@ public func fetch(_ request: FetchRequest) async throws -> FetchResponse {
             forStatusCode: res.statusCode
         ),
         headers: FetchHeaders(
-            (res.allHeaderFields as NSDictionary as? [String: String]) ?? [:]
+            (res.allHeaderFields as? [String: String]) ?? [:]
         ),
         body: body
     )
