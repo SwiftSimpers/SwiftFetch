@@ -16,6 +16,18 @@ public enum RequestMethod {
 }
 
 /**
+ Used to set redirect policy for a request.
+ */
+public enum RedirectPolicy {
+    /// Automatically follows redirect
+    case follow
+    /// Errors when redirect hits
+    case error
+    /// Doesn't follow redirect
+    case manual
+}
+
+/**
  Used to set the HTTP header for a request.
  */
 public struct FetchHeaders {
@@ -69,12 +81,15 @@ public struct FetchRequestInit {
     public var headers: [String: String] = [:]
     /// The body of the request.
     public var body: Data?
+    /// Whether to automatically process redirect or not.
+    public var redirect: RedirectPolicy = .manual
     
-    public init(method: RequestMethod? = nil, url: URL? = nil, headers: [String: String] = [:], body: Data? = nil) {
+    public init(method: RequestMethod? = nil, url: URL? = nil, headers: [String: String] = [:], body: Data? = nil, redirect: RedirectPolicy = .manual) {
         self.method = method
         self.url = url
         self.headers = headers
         self.body = body
+        self.redirect = redirect
     }
 }
 
@@ -91,6 +106,8 @@ public class FetchRequest {
     var headers = FetchHeaders([:])
     /// The body of the request.
     var body: Data?
+    /// Whether to automatically process redirect or not.
+    var redirect: RedirectPolicy = .manual
 
     /**
      Used to convert `FetchRequestInit` to `URLRequest`.
@@ -116,6 +133,7 @@ public class FetchRequest {
         if let body = data.body {
             self.body = body
         }
+        self.redirect = data.redirect
     }
 
     /**
@@ -267,6 +285,22 @@ public func fetch(_ requestInit: FetchRequestInit) async throws -> FetchResponse
     try await fetch(FetchRequest(requestInit))
 }
 
+private class FetchSessionDelegate: NSObject, URLSessionTaskDelegate {
+    let allowRedirection: Bool
+    
+    init(allowRedirection: Bool) {
+        self.allowRedirection = allowRedirection
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest) async -> URLRequest? {
+        if allowRedirection {
+            return request
+        } else {
+            return nil
+        }
+    }
+}
+
 /**
  Makes a request to the server.
 
@@ -275,7 +309,8 @@ public func fetch(_ requestInit: FetchRequestInit) async throws -> FetchResponse
  - returns: A `FetchResponse` that contains the response from the server.
  */
 public func fetch(_ request: FetchRequest) async throws -> FetchResponse {
-    let (body, urlResponse) = try await URLSession.shared.bytes(for: request.intoURLRequest())
+    let urlSession = URLSession(configuration: .default, delegate: FetchSessionDelegate(allowRedirection: request.redirect == .follow), delegateQueue: nil)
+    let (body, urlResponse) = try await urlSession.bytes(for: request.intoURLRequest())
 
     guard let res = urlResponse as? HTTPURLResponse else { throw NotAHTTPError() }
 
